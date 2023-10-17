@@ -132,11 +132,11 @@ void translate(char *stream, fsize_t count, char from, char to) {
 // For a given byte stream, translate all character 'from' to 'to'
 void vpmask_translate(char *stream, fsize_t count, char from, char to) {
 
-  auto LEAST_SIG_MASK = 0x01010101;
-  auto wide_out = reinterpret_cast<uint32_t *>(stream);
+  auto LEAST_SIG_MASK = 0x0101010101010101;
+  auto wide_out = reinterpret_cast<uint64_t *>(stream);
 
-  assert((count) % 4 == 0);
-  auto dword_count = count / 4;
+  assert((count) % 8 == 0);
+  auto dword_count = count / 8;
   for (fsize_t i = 0; i < dword_count; ++i) {
     auto word = wide_out[i];
     auto MASK1 = (word >> 2) & ((~word) >> 1) & LEAST_SIG_MASK;
