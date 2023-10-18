@@ -123,17 +123,6 @@ output_pos(fsize_t input_pos)
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// For a given byte stream, translate all character 'from' to 'to'
-void
-translate(char* stream, fsize_t count, char from, char to)
-{
-  for (fsize_t i = 0; i < count; ++i) {
-    stream[i] = (stream[i] == from)? to : stream[i];
-  }
-}
-
-
-//////////////////////////////////////////////////////////////////////////////
 // Figure out what is the amount of bytes each thread should work on.
 // The returned task size must be a multiple of BPW (unless the file is shorter).
 void
@@ -494,17 +483,24 @@ decode_pdep(const char* in, fsize_t remaining_bases, char* out)
       0b01000001'01000001'01000001'01000001'01000001'01000001'01000001'01000001;
   constexpr word_t MASK1 =
       0b00000110'00000110'00000110'00000110'00000110'00000110'00000110'00000110;
+  constexpr word_t MASK2 =
+      0b00000001'00000001'00000001'00000001'00000001'00000001'00000001'00000001;
   auto wide_in = reinterpret_cast<const uint16_t*>(in);
   auto wide_out = reinterpret_cast<uint64_t*>(out);
 
 #pragma GCC unroll UNROLL_FACTOR
-  for (fsize_t i = 0; i < remaining_bases; i += sizeof(*wide_in) * BPPB) {
+  for (fsize_t i = 0; i < remaining_bases; i += sizeof(*wide_in) * BPPB, ++wide_out) {
     if constexpr (ORDERED) {
-      *wide_out++ = __builtin_bswap64(OR | _pdep_u64(__builtin_bswap16(*wide_in++), MASK1));
+      *wide_out = __builtin_bswap64(OR | _pdep_u64(__builtin_bswap16(*wide_in++), MASK1));
     } else {
-      *wide_out++ = OR | _pdep_u64(*wide_in++, MASK1);
+      *wide_out = OR | _pdep_u64(*wide_in++, MASK1);
     }
+
+    // Translate 'E's to 'T's using bit manipulation
+    const auto is_e = (*wide_out >> 2) & ((~*wide_out) >> 1) & MASK2;
+    *wide_out ^= is_e | (is_e << 4);
   }
+
   return reinterpret_cast<char*>(wide_out);
 #endif
 }
@@ -517,7 +513,6 @@ decode(const char* in,  char* out, fsize_t remaining_bases)
   if (g_config.use_pext && remaining_bases >= fsize_t(BPW)) {
     const fsize_t bases = round_down(remaining_bases, UNROLL_FACTOR * BPW);
     out = g_config.ordered? decode_pdep<true>(in, bases, out) : decode_pdep<false>(in, bases, out);
-    translate(out - bases, bases, 'E', 'T');
     remaining_bases -= bases;
     in += bases / BPPB;
   }

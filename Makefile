@@ -7,7 +7,7 @@ OPTFLAGS=-O0 -g
 OPTFLAGS=-O3 -DNDEBUG
 CXXFLAGS=-std=c++2a -Wall -Wextra -pedantic -mbmi2 -mtune=native -pthread
 
-OUTPUTS=*.pdf *.tex _main.* libs _book _bookdown_files *.html *.log *.aux *.bbl *.blg *.dvi *.out *.xcp
+OUTPUTS=*.pdf main.tex _main.* libs _book _bookdown_files *.html *.log *.aux *.bbl *.blg *.dvi *.out *.xcp
 R=Rscript
 
 .PHONY: all
