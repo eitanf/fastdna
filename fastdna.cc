@@ -4,16 +4,12 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <string>
 #include <thread>
-#include <type_traits>
-#include <utility>
 #include <vector>
 
 #include <aio.h>
 #include <fcntl.h>
 #include <getopt.h>
-#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -35,7 +31,6 @@ namespace fastdna {
 using namespace std::chrono;
 
 using fsize_t = off_t;  // File sizes and offsets beyond 32 bits
-using binary_buffer_t = std::vector<uint8_t>;
 using word_t = uint64_t; // The largest size that can be bit-processed in parallel
 using bit_mapping_t = std::array<uint8_t, 256>; // Mapping from DNA character to 2 bits
 using char_mapping_t = std::array<uint32_t, 1<<8>; // Mapping from 8 bits to 4 DNA characters
