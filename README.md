@@ -25,3 +25,8 @@ But because the contents of the input file don't affect performance, you can gen
 ```
 tr -dc 'ACGT' < /dev/urandom | head -c 1T > inputfile
 ```
+
+## Rebuilding the document
+
+The document `cal.pdf` can be built from the source markdown file `cal.Rmd`. It requires R with a few packages, as well as the `cal.csv` data file with the results of the experiment.
+Both `cal.csv` and `cal.pdf` can be built from scratch using `make` once the prerequisites have been met.

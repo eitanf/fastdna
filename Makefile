@@ -12,7 +12,7 @@ R=Rscript
 
 .PHONY: all
 
-all: fastdna
+all: fastdna cal.pdf
 
 fastdna: fastdna.o
 	$(CXX) $(OPTFLAGS) $(CXXFLAGS) -o $@ $^ -lrt -flto
