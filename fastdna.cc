@@ -38,7 +38,8 @@ using fsize_t = off_t;  // File sizes and offsets beyond 32 bits
 using binary_buffer_t = std::vector<uint8_t>;
 using word_t = uint64_t; // The largest size that can be bit-processed in parallel
 using bit_mapping_t = std::array<uint8_t, 256>; // Mapping from DNA character to 2 bits
-using char_mapping_t = std::array<uint32_t, 256>; // Mapping from 8 bits to 4 DNA characters
+using char_mapping_t = std::array<uint32_t, 1<<8>; // Mapping from 8 bits to 4 DNA characters
+using wchar_mapping_t = std::array<uint64_t, 1<<16>; // Mapping from 16-bit packed codes to 8 DNA characters
 
 
 // Constants:
@@ -51,10 +52,24 @@ constexpr auto UNROLL_FACTOR = UNROLL;
 constexpr fsize_t MIN_CHUNK_SZ = 1 << 10;
 constexpr fsize_t DEFAULT_CHUNK_SZ = 1 << 17;
 constexpr char char_of[4] = { 'A', 'C', 'T', 'G' };
+constexpr uint64_t xor_of[4] = { 0b01000001, 0b01000001, 0b01010000, 0b01000001 };
 constexpr fsize_t MAX_BUFFER_SZ = (1 << 30); // Buffers >= 2GB are problematic for I/O
 
+// Map from a letter (base) to a 2-bit code
+constexpr bit_mapping_t
+codes_of_letters()
+{
+  bit_mapping_t ret;
+  ret['A'] = 0; // 0b00
+  ret['C'] = 1; // 0b01
+  ret['T'] = 2; // 0b10
+  ret['G'] = 3; // 0b11
+  return ret;
+}
+
+// Create map from 4 2-bit codes to 4 letters (bases)
 constexpr char_mapping_t
-letters_of_code()
+letters_of_codes()
 {
   char_mapping_t ret;
   for (int i = 0; i < 256; i++) {
@@ -69,19 +84,32 @@ letters_of_code()
   return ret;
 }
 
-constexpr bit_mapping_t
-codes_of_letters()
-{
-  bit_mapping_t ret;
-  ret['A'] = 0; // 0b00
-  ret['C'] = 1; // 0b01
-  ret['T'] = 2; // 0b10
-  ret['G'] = 3; // 0b11
+
+// Create map from 8 *unordered* 2-bit codes to 8 letters (bases)
+constexpr wchar_mapping_t
+letters_of_wcodes() {
+  wchar_mapping_t ret;
+  for (int i = 0; i < (1 << 16); i++) {
+    const uint16_t bits = static_cast<uint16_t>(i);
+    const uint64_t decoded =
+        static_cast<uint64_t>(char_of[(bits >> 0) & 0x3]) << 0   |
+        static_cast<uint64_t>(char_of[(bits >> 2) & 0x3]) << 8   |
+        static_cast<uint64_t>(char_of[(bits >> 4) & 0x3]) << 16  |
+        static_cast<uint64_t>(char_of[(bits >> 6) & 0x3]) << 24  |
+        static_cast<uint64_t>(char_of[(bits >> 8) & 0x3]) << 32  |
+        static_cast<uint64_t>(char_of[(bits >> 10) & 0x3]) << 40 |
+        static_cast<uint64_t>(char_of[(bits >> 12) & 0x3]) << 48 |
+        static_cast<uint64_t>(char_of[(bits >> 14) & 0x3]) << 56;
+    ;
+    ret[i] = decoded;
+  }
   return ret;
 }
 
+
 constexpr auto bit_map = codes_of_letters();
-constexpr auto char_map = letters_of_code();
+constexpr auto char_map = letters_of_codes();
+constexpr auto wchar_map = letters_of_wcodes();
 
 // Global configuration
 struct Configuration {
@@ -470,40 +498,52 @@ encode_file(int infile, int outfile, fsize_t insize)
 
 //////////////////////////////////////////////////////////////////////////////
 // Decode two bytes of input at a time using PDEP and reordering
-template <bool ORDERED> // Does encoding maintain original basepair order?
 inline char*
-decode_pdep(const char* in, fsize_t remaining_bases, char* out)
+decode_pdep_ordered(const char* in, fsize_t remaining_bases, char* out)
 {
 #ifndef __BMI2__
   assert(false && "BMI2 instruction set not supported!");
   return nullptr;
 #else
 
-  constexpr word_t OR =
+  constexpr word_t AS =
       0b01000001'01000001'01000001'01000001'01000001'01000001'01000001'01000001;
-  constexpr word_t MASK1 =
+  constexpr word_t BASES =
       0b00000110'00000110'00000110'00000110'00000110'00000110'00000110'00000110;
-  constexpr word_t MASK2 =
+  constexpr word_t ONES =
       0b00000001'00000001'00000001'00000001'00000001'00000001'00000001'00000001;
   auto wide_in = reinterpret_cast<const uint16_t*>(in);
   auto wide_out = reinterpret_cast<uint64_t*>(out);
 
 #pragma GCC unroll UNROLL_FACTOR
-  for (fsize_t i = 0; i < remaining_bases; i += sizeof(*wide_in) * BPPB, ++wide_out) {
-    if constexpr (ORDERED) {
-      *wide_out = __builtin_bswap64(OR | _pdep_u64(__builtin_bswap16(*wide_in++), MASK1));
-    } else {
-      *wide_out = OR | _pdep_u64(*wide_in++, MASK1);
-    }
+  for (fsize_t i = 0; i < remaining_bases; i += sizeof(*wide_in) * BPPB) {
+    *wide_out = __builtin_bswap64(
+        AS | _pdep_u64(__builtin_bswap16(*wide_in++), BASES));
 
     // Translate 'E's to 'T's using bit manipulation
-    const auto is_e = (*wide_out >> 2) & ((~*wide_out) >> 1) & MASK2;
-    *wide_out ^= is_e | (is_e << 4);
+    const auto is_e = (*wide_out >> 2) & ((~*wide_out) >> 1) & ONES;
+    *wide_out++ ^= is_e | (is_e << 4);
   }
 
   return reinterpret_cast<char*>(wide_out);
 #endif
 }
+
+//////////////////////////////////////////////////////////////////////////////
+// Decode two bytes of input at a time using PDEP and reordering
+inline char*
+decode_lut_unordered(const char* in, fsize_t remaining_bases, char* out)
+{
+  auto wide_in = reinterpret_cast<const uint16_t*>(in);
+  auto wide_out = reinterpret_cast<uint64_t*>(out);
+
+#pragma GCC unroll UNROLL_FACTOR
+  for (fsize_t i = 0; i < remaining_bases; i += sizeof(*wide_in) * BPPB) {
+    *wide_out++ = wchar_map[*wide_in++];
+  }
+  return reinterpret_cast<char*>(wide_out);
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 // Decode num_bases bytes of an an input buffer to an output buffer
@@ -512,7 +552,9 @@ decode(const char* in,  char* out, fsize_t remaining_bases)
 {
   if (g_config.use_pext && remaining_bases >= fsize_t(BPW)) {
     const fsize_t bases = round_down(remaining_bases, UNROLL_FACTOR * BPW);
-    out = g_config.ordered? decode_pdep<true>(in, bases, out) : decode_pdep<false>(in, bases, out);
+    out = g_config.ordered?
+          decode_pdep_ordered(in, bases, out)
+        : decode_lut_unordered(in, bases, out);
     remaining_bases -= bases;
     in += bases / BPPB;
   }
