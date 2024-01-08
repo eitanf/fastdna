@@ -12,7 +12,7 @@ abstract: |
 
   To address this challenge, many data-compression techniques have been developed, offering a range of tradeoffs between compression ratio, computation time, memory requirements, and complexity.  This paper focuses on a specific technique on one extreme of this tradeoff, namely two-bit coding, wherein every base in a genomic sequence is compressed from its original 8-bit ASCII representation to a unique two-bit binary representation. Even for this simple direct-coding scheme, current implementations leave room for significant performance improvements.
 
-  Here, we show that this encoding can exploit multiple levels of parallelism in modern computer architectures to maximize the efficiency of the encoding and decoding.  Our open-source implementation achieves encoding and decoding rates of billions of bases per second, which are much higher than previously reported results. In fact, the throughput is typically limited only by the speed of the underlying storage media.
+  Here, we show that this encoding can exploit multiple levels of parallelism in modern computer architectures to maximize encoding and decoding efficiency.  Our open-source implementation achieves encoding and decoding rates of billions of bases per second, which are much higher than previously reported results. In fact, our measured throughput is typically limited only by the speed of the underlying storage media.
 ---
 
 ```{r setup, echo=F, message=F, warning=F, cache=F}
@@ -47,7 +47,7 @@ unroll <- filter(data, experiment %in% c("Unroll2"), chunk_sz < 2^30)
 # Introduction
 
 
-The size of sequenced genomic data doubles roughly every 18 months, and has already grown to petabyte-scale [@mansouri20:lossless].
+The size of sequenced genomic data in the world doubles roughly every 18 months, and has already grown to petabyte-scale [@mansouri20:lossless].
 Storing and manipulating these sequences, which can be several gigabytes long for whole genomes, requires significant storage and computing resources [@gilmary21:compression].
 Moreover, Next-generation sequencing (NGS) techniques produce millions of short reads, which are less amenable to compression algorithms that exploit the redundancies in longer sequences [@zhu13:throughput].
 Dozens of lossless compression techniques have been proposed for DNA sequences, with varying tradeoffs between compression ratios, encoding and decoding speed, and memory consumption [@pratas19:reference].
@@ -55,7 +55,7 @@ These tradeoffs matter because in many applications, throughput and ease-of-proc
 
 When time and memory constraints are the top priorities for a DNA encoder, there is an encoding technique that simply maps each of the four possible base letters ('A', 'C', 'G', or 'T') to a unique 2-bit sequence.
 This encoding is not a compression method per se, even though the trivial 4:1 size reduction it achieves from ASCII files is not far from that achieved with more sophisticated approaches.
-Standard substitution-based (e.g., Lempel-Ziv) and entropy-based (e.g., Huffman) encoding methods rarely accomplish significantly better compression ratios than the two-bits-per-pair of direct coding [@cox12:bwt].
+Standard substitution-based (e.g., Lempel-Ziv) and entropy-based (e.g., Huffman) encoding methods rarely significantly outperform the 4:1 compression ratio of direct coding [@cox12:bwt].
 More specialized DNA-specific approaches often achieve better size reduction either at the cost of significant computation resources or by referring to a baseline genome that brings its own limitations and disadvantages [@gilmary21:compression].
 
 In this paper, we explore the idea of storing raw DNA sequences using a bijective mapping to two bits per symbol, which is particularly useful when extremely fast compression, decompression, access, or search is necessary; when random-access to any base in the encoded stream is desired; or when combined with specialized compression techniques.
@@ -287,7 +287,7 @@ noIO %>%
 ```
 
 
-Again, we confirm this bottleneck by removing it, i.e., by encoding smaller chunks that fit in CPU cache.
+Again, we confirm this bottleneck by removing it, i.e., by encoding smaller chunks that fit in the CPU cache.
 As Figure \@ref(fig:memory-chunked) shows, smaller chunks indeed improve throughput but not dramatically, suggesting there is still room for more performance.
 
 
@@ -336,7 +336,7 @@ This vectorization does indeed unlock an order-of-magnitude improvement in maxim
 Moreover, even when chunk sizes are too large to fit entirely in L3 cache (64 MiB), we can saturate the RAM bandwidth at a much lower thread count, requiring fewer CPU resources.
 
 The decoder works similarly with the reciprocal parallel-deposit instruction (`PDEP`) and byte reordering, but requires an extra translation step, because the '`10`' bit sequence actually maps back to 'E', not to 'T'.
-Although this translation is also implemented with bit-parallel operations, it still slows down decoding compared the baseline.
+Although this translation is also implemented with bit-parallel operations, it still slows down decoding compared to the baseline.
 
 
 ```{r pext, echo=F, warning=F, message=F, cache=F, fig.height=3.5, out.width="100%", fig.cap="Median encoder throughput using pext (100 runs; 95\\% CI; no I/O)"}
@@ -441,13 +441,15 @@ Figure \@ref(fig:final) summarizes the best-case performance (not median) for al
 The best encoder throughput approaches the CPU's L3 memory-copy bandwidth of 532 GB/s, as measured by AIDA 64.
 Moreover, the memory consumption of both the encoder and decoder is dominated by the configurable buffer sizes.
 Since we use modestly-sized buffers for improved performance (typically 128 KiB), even with 16 threads the encoder and decoder require less than 5 MiB of RAM.
+For comparison, even the SSD-based encoding is about $5\times{}$ faster than the fastest encoder recorded in the sequence compression benchmark [@kryukov20:sequence], lzturbo-20-4t, using $\approx{0.25}$% of its RAM.
+
 These results demonstrate that direct encoding can be so efficient that it is feasible to encode or encode data on the fly even with modest resources, including on embedded devices like smartNICs and FPGAs.
 Direct-encoding can also be incorporated as part of other DNA storage or compression mechanisms such as reference-based and de-novo compression [@zhu13:throughput] with little additional overhead.
 <!--There are also various methods and techniques to compress DNA based on direct lookup tables or dictionaries where a fast, collision-free hashing of DNA strings based on the methods we presented could accelerate the algorithm [@arya17:improved; @bharti11:biological; @majumder18:cbstd].
 Many other DNA compressors also rely on two-bit encoding as a stepping stone in their algorithms [@challa16:novel; @gupta10:efficient; @saada15:dna].
 -->
 
-There remain several interesting questions for future work: why does decoding throughput sometimes exceed encoding throughput and sometimes not? how is IPC affected by the storage media and by the number of threads? what is the effect of multithreading on performance variability? and, can we successfully use these algorithms in GPUs, with their high core count and memory bandwidth?
+There remain several interesting questions for future work: Why does decoding throughput sometimes exceed encoding throughput and sometimes not? How is IPC affected by the storage media and by the number of threads? What is the effect of multithreading on performance variability? And, can we successfully use these algorithms in GPUs, with their high core count and memory bandwidth?
 
 ```{r final, echo=F, warning=F, message=F, cache=F, fig.height=3.5, out.width="100%", fig.cap="Maximum throughput comparison (100 runs)"}
 ram_sz <- max(unroll$chunk_sz)
