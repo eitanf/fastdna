@@ -54,7 +54,7 @@ constexpr fsize_t MAX_BUFFER_SZ = (1 << 30); // Buffers >= 2GB are problematic f
 constexpr bit_mapping_t
 codes_of_letters()
 {
-  bit_mapping_t ret;
+  bit_mapping_t ret{};
   ret['A'] = 0; // 0b00
   ret['C'] = 1; // 0b01
   ret['T'] = 2; // 0b10
