@@ -66,7 +66,7 @@ Nevertheless, our techniques can be easily applied to the long sequences of base
 ## Motivation and Contribution {-}
 
 The main motivation for our work is to balance the ease of processing and interactivity of raw sequences with the moderate storage efficiency of two-bit encoding.
-As alluded to earlier, there are dozens of general and specialized compression algorithms for DNA sequences, but their resource requirements can be significant: a recent comprehensive benhchmarking effort compared dozens of these techniques and found that many encode or decode at a rate well under 1000 MB/sec while consuming gigabytes of RAM [@kryukov20:sequence].
+As alluded to earlier, there are dozens of general and specialized compression algorithms for DNA sequences, but their resource requirements can be significant: a recent comprehensive benchmarking effort compared dozens of these techniques and found that many encode or decode at a rate well under 1000 MB/sec while consuming gigabytes of RAM [@kryukov20:sequence].
 
 On the other hand, two-bit encoding offers significant efficiency and simplicity advantages.
 Consequently, it forms the core of compression programs such as GenBitCompress [@mitra18:survey] and also the basis for more sophisticated algorithms such as GenCodex and others [@challa16:novel; @du20:compression; @gupta10:efficient; @saada15:dna; @satyanvesh12:gencodex].
