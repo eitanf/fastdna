@@ -328,7 +328,7 @@ encode_pext(const word_t* words, fsize_t limit, char* out)
 // At first values are encoded in 8-bytes batches by encode_words.
 // Then, bytes are encoded one-by-one into bytes.
 // If the remaining bytes is not a multiple of BPPB, the last few values are
-// condensed to the left of a byte.
+// condensed to the left of a byte in ordered mode, or the right in unordered mode.
 char*
 encode(const char* in, fsize_t insize, char* out)
 {
@@ -339,6 +339,26 @@ encode(const char* in, fsize_t insize, char* out)
     out = g_config.ordered ?
           encode_pext<true>(words, current_base, out) :
           encode_pext<false>(words, current_base, out);
+  }
+
+  // Unordered scalar tails use the same low-bit-first layout as PEXT.
+  if (!g_config.ordered) {
+    while (insize - current_base >= BPPB) {
+      *out = bit_map[in[current_base++]];
+      *out |= bit_map[in[current_base++]] << 2;
+      *out |= bit_map[in[current_base++]] << 4;
+      *out |= bit_map[in[current_base++]] << 6;
+      out++;
+    }
+
+    if (current_base < insize) {
+      *out = 0;
+      for (int shift = 0; current_base < insize; shift += 2) {
+        *out |= bit_map[in[current_base++]] << shift;
+      }
+      out++;
+    }
+    return out;
   }
 
   while (insize - current_base >= BPPB) {
@@ -552,6 +572,23 @@ decode(const char* in,  char* out, fsize_t remaining_bases)
         : decode_lut_unordered(in, bases, out);
     remaining_bases -= bases;
     in += bases / BPPB;
+  }
+
+  // The low half of wchar_map decodes four unordered bases without a new LUT.
+  if (!g_config.ordered) {
+    auto wide_out = reinterpret_cast<uint32_t*>(out);
+    for (; remaining_bases >= BPPB; remaining_bases -= BPPB) {
+      *wide_out++ = static_cast<uint32_t>(wchar_map[static_cast<uint8_t>(*in++)]);
+      out += BPPB;
+    }
+
+    if (remaining_bases > 0) {
+      const auto bits = static_cast<uint8_t>(*in);
+      for (int shift = 0; remaining_bases > 0; remaining_bases--, shift += 2) {
+        *out++ = char_of[(bits >> shift) & 0x3];
+      }
+    }
+    return out;
   }
 
   // write any whole bytes left in the input
