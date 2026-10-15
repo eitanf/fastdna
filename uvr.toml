@@ -1,0 +1,13 @@
+sources = [{ name = "packagemanager.posit.co", url = "https://packagemanager.posit.co/cran/2026-10-14" }]
+[project]
+name = "fastdna"
+r_version = ">=4.3.0"
+bare = true
+
+[dependencies]
+bookdown = "*"
+scales = "*"
+knitr = "*"
+dplyr = "*"
+ggplot2 = "*"
+tidyr = "*"

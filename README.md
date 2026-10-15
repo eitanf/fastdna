@@ -28,5 +28,6 @@ tr -dc 'ACGT' < /dev/urandom | head -c 1T > inputfile
 
 ## Rebuilding the document
 
-The document `cal.pdf` can be built from the source markdown file `cal.Rmd`. It requires R with a few packages, as well as the `cal.csv` data file with the results of the experiment.
-Both `cal.csv` and `cal.pdf` can be built from scratch using `make` once the prerequisites have been met.
+The article version (`cal.pdf`) can be built from `cal.Rmd`. With R 4.3 or newer, Pandoc, and a complete LaTeX distribution available, run `make cal.pdf`. The Makefile installs the pinned `uvr` version if needed and restores the exact R package versions from `uvr.lock` into a private library in the user's cache. The packages are resolved against the date-pinned CRAN snapshot from 2026-10-14. The first build needs network access to download `uvr` and the R packages.
+
+The `cal.csv` experiment data is included. To regenerate it, run `make cal-data`; this reruns the experiments and requires their prerequisites described in `cal-experiments.py`.

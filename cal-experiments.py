@@ -104,7 +104,7 @@ def encode_decode(fn,
     cmd = ["./fastdna"] + opts + ["e"] + [fn]
     out = subprocess.run(cmd, stdout = subprocess.PIPE).stdout.decode('utf-8')
 #    print(" ".join(cmd), out)
-    m = re.match(".*chunk size: (\d+) threads: (\d+).*\nTime: (\d+).*Bandwidth: (\d*\.?\d+).*", out)
+    m = re.match(r".*chunk size: (\d+) threads: (\d+).*\nTime: (\d+).*Bandwidth: (\d*\.?\d+).*", out)
     if not m:   print(f"\n{cmd}\n{out}")
     assert m, "Couldn't parse encoder output"
     enc_ch = int(m.group(1))
@@ -122,7 +122,7 @@ def encode_decode(fn,
     cmd = ["./fastdna"] + opts + ["d"] + [fn+".2b"]
     out = subprocess.run(cmd, stdout = subprocess.PIPE).stdout.decode('utf-8')
 
-    m = re.match(".*chunk size: (\d+) threads: (\d+).*\nTime: (\d+).*Bandwidth: (\d*\.?\d+).*", out)
+    m = re.match(r".*chunk size: (\d+) threads: (\d+).*\nTime: (\d+).*Bandwidth: (\d*\.?\d+).*", out)
     if not m:   print(cmd, out)
     assert m, "Couldn't find time or bandwidth in decoder output"
     dec_t = int(m.group(3)) / 1.e6
@@ -146,7 +146,7 @@ def get_filesystem_partition(path):
 
 ############
 def get_disk_model(partition):
-    disk = re.sub("p\d+$", "", partition)
+    disk = re.sub(r"p\d+$", "", partition)
     cmd = f"lsblk -o MODEL {disk} | head -2 | tail -1"
     return subprocess.check_output(cmd, shell=True, text=True).strip()
 

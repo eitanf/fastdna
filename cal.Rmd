@@ -17,7 +17,9 @@ abstract: |
 
 ```{r setup, echo=F, message=F, warning=F, cache=F}
 library('scales')
-library('tidyverse')
+library('dplyr')
+library('tidyr')
+library('ggplot2')
 
 data <- read.csv("cal.csv") %>%
   mutate(pext=as.logical(pext),

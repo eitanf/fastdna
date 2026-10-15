@@ -1,0 +1,547 @@
+manifest_fingerprint = "sha256:504c3a92070bf1d942a69ad26610a135d4b6cc46c885cdd690957879550d2ba0"
+
+[r]
+version = "4.3.3"
+
+[[package]]
+name = "R6"
+version = "2.6.1"
+source = "packagemanager.posit.co"
+raw_version = "2.6.1"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/R6_2.6.1.tar.gz"
+
+[[package]]
+name = "RColorBrewer"
+version = "1.1.3"
+source = "packagemanager.posit.co"
+raw_version = "1.1-3"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/RColorBrewer_1.1-3.tar.gz"
+
+[[package]]
+name = "S7"
+version = "0.2.2"
+source = "packagemanager.posit.co"
+raw_version = "0.2.2"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/S7_0.2.2.tar.gz"
+
+[[package]]
+name = "base64enc"
+version = "0.1.6"
+source = "packagemanager.posit.co"
+raw_version = "0.1-6"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/base64enc_0.1-6.tar.gz"
+
+[[package]]
+name = "bookdown"
+version = "0.48.0"
+source = "packagemanager.posit.co"
+raw_version = "0.48"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/bookdown_0.48.tar.gz"
+requires = [
+    "htmltools",
+    "knitr",
+    "rmarkdown",
+    "jquerylib",
+    "xfun",
+    "tinytex",
+    "yaml",
+]
+system_requirements = "Pandoc (>= 1.17.2)"
+
+[[package]]
+name = "bslib"
+version = "0.12.0"
+source = "packagemanager.posit.co"
+raw_version = "0.12.0"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/bslib_0.12.0.tar.gz"
+requires = [
+    "base64enc",
+    "cachem",
+    "fastmap",
+    "htmltools",
+    "jquerylib",
+    "jsonlite",
+    "lifecycle",
+    "memoise",
+    "mime",
+    "rlang",
+    "sass",
+]
+
+[[package]]
+name = "cachem"
+version = "1.1.0"
+source = "packagemanager.posit.co"
+raw_version = "1.1.0"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/cachem_1.1.0.tar.gz"
+requires = [
+    "rlang",
+    "fastmap",
+]
+
+[[package]]
+name = "cli"
+version = "3.6.6"
+source = "packagemanager.posit.co"
+raw_version = "3.6.6"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/cli_3.6.6.tar.gz"
+
+[[package]]
+name = "cpp11"
+version = "0.5.5"
+source = "packagemanager.posit.co"
+raw_version = "0.5.5"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/cpp11_0.5.5.tar.gz"
+
+[[package]]
+name = "digest"
+version = "0.6.39"
+source = "packagemanager.posit.co"
+raw_version = "0.6.39"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/digest_0.6.39.tar.gz"
+
+[[package]]
+name = "dplyr"
+version = "1.2.1"
+source = "packagemanager.posit.co"
+raw_version = "1.2.1"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/dplyr_1.2.1.tar.gz"
+requires = [
+    "cli",
+    "generics",
+    "glue",
+    "lifecycle",
+    "magrittr",
+    "pillar",
+    "R6",
+    "rlang",
+    "tibble",
+    "tidyselect",
+    "vctrs",
+]
+
+[[package]]
+name = "evaluate"
+version = "1.0.5"
+source = "packagemanager.posit.co"
+raw_version = "1.0.5"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/evaluate_1.0.5.tar.gz"
+
+[[package]]
+name = "farver"
+version = "2.1.2"
+source = "packagemanager.posit.co"
+raw_version = "2.1.2"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/farver_2.1.2.tar.gz"
+
+[[package]]
+name = "fastmap"
+version = "1.2.0"
+source = "packagemanager.posit.co"
+raw_version = "1.2.0"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/fastmap_1.2.0.tar.gz"
+
+[[package]]
+name = "fontawesome"
+version = "0.5.3"
+source = "packagemanager.posit.co"
+raw_version = "0.5.3"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/fontawesome_0.5.3.tar.gz"
+requires = [
+    "rlang",
+    "htmltools",
+]
+
+[[package]]
+name = "fs"
+version = "2.1.0"
+source = "packagemanager.posit.co"
+raw_version = "2.1.0"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/fs_2.1.0.tar.gz"
+system_requirements = "libuv: libuv-devel (rpm) or libuv1-dev (deb). Alternatively to build the vendored libuv 'cmake' is required. GNU make."
+
+[[package]]
+name = "generics"
+version = "0.1.4"
+source = "packagemanager.posit.co"
+raw_version = "0.1.4"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/generics_0.1.4.tar.gz"
+
+[[package]]
+name = "ggplot2"
+version = "4.0.3"
+source = "packagemanager.posit.co"
+raw_version = "4.0.3"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/ggplot2_4.0.3.tar.gz"
+requires = [
+    "cli",
+    "gtable",
+    "isoband",
+    "lifecycle",
+    "rlang",
+    "S7",
+    "scales",
+    "vctrs",
+    "withr",
+]
+
+[[package]]
+name = "glue"
+version = "1.8.1"
+source = "packagemanager.posit.co"
+raw_version = "1.8.1"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/glue_1.8.1.tar.gz"
+
+[[package]]
+name = "gtable"
+version = "0.3.6"
+source = "packagemanager.posit.co"
+raw_version = "0.3.6"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/gtable_0.3.6.tar.gz"
+requires = [
+    "cli",
+    "glue",
+    "lifecycle",
+    "rlang",
+]
+
+[[package]]
+name = "highr"
+version = "0.12.0"
+source = "packagemanager.posit.co"
+raw_version = "0.12"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/highr_0.12.tar.gz"
+requires = ["xfun"]
+
+[[package]]
+name = "htmltools"
+version = "0.5.9"
+source = "packagemanager.posit.co"
+raw_version = "0.5.9"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/htmltools_0.5.9.tar.gz"
+requires = [
+    "base64enc",
+    "digest",
+    "fastmap",
+    "rlang",
+]
+
+[[package]]
+name = "isoband"
+version = "0.3.0"
+source = "packagemanager.posit.co"
+raw_version = "0.3.0"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/isoband_0.3.0.tar.gz"
+requires = [
+    "cli",
+    "rlang",
+    "cpp11",
+]
+
+[[package]]
+name = "jquerylib"
+version = "0.1.4"
+source = "packagemanager.posit.co"
+raw_version = "0.1.4"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/jquerylib_0.1.4.tar.gz"
+requires = ["htmltools"]
+
+[[package]]
+name = "jsonlite"
+version = "2.0.0"
+source = "packagemanager.posit.co"
+raw_version = "2.0.0"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/jsonlite_2.0.0.tar.gz"
+
+[[package]]
+name = "knitr"
+version = "1.52.0"
+source = "packagemanager.posit.co"
+raw_version = "1.52"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/knitr_1.52.tar.gz"
+requires = [
+    "evaluate",
+    "highr",
+    "xfun",
+    "yaml",
+]
+system_requirements = "Package vignettes based on R Markdown v2 or reStructuredText require Pandoc (http://pandoc.org). The function rst2pdf() requires rst2pdf (https://github.com/rst2pdf/rst2pdf)."
+
+[[package]]
+name = "labeling"
+version = "0.4.3"
+source = "packagemanager.posit.co"
+raw_version = "0.4.3"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/labeling_0.4.3.tar.gz"
+
+[[package]]
+name = "lifecycle"
+version = "1.0.5"
+source = "packagemanager.posit.co"
+raw_version = "1.0.5"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/lifecycle_1.0.5.tar.gz"
+requires = [
+    "cli",
+    "rlang",
+]
+
+[[package]]
+name = "magrittr"
+version = "2.0.5"
+source = "packagemanager.posit.co"
+raw_version = "2.0.5"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/magrittr_2.0.5.tar.gz"
+
+[[package]]
+name = "memoise"
+version = "2.0.1"
+source = "packagemanager.posit.co"
+raw_version = "2.0.1"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/memoise_2.0.1.tar.gz"
+requires = [
+    "rlang",
+    "cachem",
+]
+
+[[package]]
+name = "mime"
+version = "0.13.0"
+source = "packagemanager.posit.co"
+raw_version = "0.13"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/mime_0.13.tar.gz"
+
+[[package]]
+name = "pillar"
+version = "1.11.1"
+source = "packagemanager.posit.co"
+raw_version = "1.11.1"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/pillar_1.11.1.tar.gz"
+requires = [
+    "cli",
+    "glue",
+    "lifecycle",
+    "rlang",
+    "utf8",
+    "vctrs",
+]
+
+[[package]]
+name = "pkgconfig"
+version = "2.0.3"
+source = "packagemanager.posit.co"
+raw_version = "2.0.3"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/pkgconfig_2.0.3.tar.gz"
+
+[[package]]
+name = "purrr"
+version = "1.2.2"
+source = "packagemanager.posit.co"
+raw_version = "1.2.2"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/purrr_1.2.2.tar.gz"
+requires = [
+    "cli",
+    "lifecycle",
+    "magrittr",
+    "rlang",
+    "vctrs",
+    "cli",
+]
+
+[[package]]
+name = "rappdirs"
+version = "0.3.4"
+source = "packagemanager.posit.co"
+raw_version = "0.3.4"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/rappdirs_0.3.4.tar.gz"
+
+[[package]]
+name = "rlang"
+version = "1.3.0"
+source = "packagemanager.posit.co"
+raw_version = "1.3.0"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/rlang_1.3.0.tar.gz"
+
+[[package]]
+name = "rmarkdown"
+version = "2.32.0"
+source = "packagemanager.posit.co"
+raw_version = "2.32"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/rmarkdown_2.32.tar.gz"
+requires = [
+    "bslib",
+    "evaluate",
+    "fontawesome",
+    "htmltools",
+    "jquerylib",
+    "jsonlite",
+    "knitr",
+    "tinytex",
+    "xfun",
+    "yaml",
+]
+system_requirements = "pandoc (>= 2.8) - http://pandoc.org"
+
+[[package]]
+name = "sass"
+version = "0.4.10"
+source = "packagemanager.posit.co"
+raw_version = "0.4.10"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/sass_0.4.10.tar.gz"
+requires = [
+    "fs",
+    "rlang",
+    "htmltools",
+    "R6",
+    "rappdirs",
+]
+system_requirements = "GNU make"
+
+[[package]]
+name = "scales"
+version = "1.4.0"
+source = "packagemanager.posit.co"
+raw_version = "1.4.0"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/scales_1.4.0.tar.gz"
+requires = [
+    "cli",
+    "farver",
+    "glue",
+    "labeling",
+    "lifecycle",
+    "R6",
+    "RColorBrewer",
+    "rlang",
+    "viridisLite",
+]
+
+[[package]]
+name = "stringi"
+version = "1.8.9"
+source = "packagemanager.posit.co"
+raw_version = "1.8.9"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/stringi_1.8.9.tar.gz"
+system_requirements = "ICU4C (>= 61, optional)"
+
+[[package]]
+name = "stringr"
+version = "1.6.0"
+source = "packagemanager.posit.co"
+raw_version = "1.6.0"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/stringr_1.6.0.tar.gz"
+requires = [
+    "cli",
+    "glue",
+    "lifecycle",
+    "magrittr",
+    "rlang",
+    "stringi",
+    "vctrs",
+]
+
+[[package]]
+name = "tibble"
+version = "3.3.1"
+source = "packagemanager.posit.co"
+raw_version = "3.3.1"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/tibble_3.3.1.tar.gz"
+requires = [
+    "cli",
+    "lifecycle",
+    "magrittr",
+    "pillar",
+    "pkgconfig",
+    "rlang",
+    "vctrs",
+]
+
+[[package]]
+name = "tidyr"
+version = "1.3.2"
+source = "packagemanager.posit.co"
+raw_version = "1.3.2"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/tidyr_1.3.2.tar.gz"
+requires = [
+    "cli",
+    "dplyr",
+    "glue",
+    "lifecycle",
+    "magrittr",
+    "purrr",
+    "rlang",
+    "stringr",
+    "tibble",
+    "tidyselect",
+    "vctrs",
+    "cpp11",
+]
+
+[[package]]
+name = "tidyselect"
+version = "1.2.1"
+source = "packagemanager.posit.co"
+raw_version = "1.2.1"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/tidyselect_1.2.1.tar.gz"
+requires = [
+    "cli",
+    "glue",
+    "lifecycle",
+    "rlang",
+    "vctrs",
+    "withr",
+]
+
+[[package]]
+name = "tinytex"
+version = "0.61.0"
+source = "packagemanager.posit.co"
+raw_version = "0.61"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/tinytex_0.61.tar.gz"
+requires = ["xfun"]
+
+[[package]]
+name = "utf8"
+version = "1.2.6"
+source = "packagemanager.posit.co"
+raw_version = "1.2.6"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/utf8_1.2.6.tar.gz"
+
+[[package]]
+name = "vctrs"
+version = "0.7.3"
+source = "packagemanager.posit.co"
+raw_version = "0.7.3"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/vctrs_0.7.3.tar.gz"
+requires = [
+    "cli",
+    "glue",
+    "lifecycle",
+    "rlang",
+]
+
+[[package]]
+name = "viridisLite"
+version = "0.4.3"
+source = "packagemanager.posit.co"
+raw_version = "0.4.3"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/viridisLite_0.4.3.tar.gz"
+
+[[package]]
+name = "withr"
+version = "3.0.3"
+source = "packagemanager.posit.co"
+raw_version = "3.0.3"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/withr_3.0.3.tar.gz"
+
+[[package]]
+name = "xfun"
+version = "0.61.0"
+source = "packagemanager.posit.co"
+raw_version = "0.61"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/xfun_0.61.tar.gz"
+
+[[package]]
+name = "yaml"
+version = "2.3.12"
+source = "packagemanager.posit.co"
+raw_version = "2.3.12"
+url = "https://packagemanager.posit.co/cran/2026-10-14/src/contrib/yaml_2.3.12.tar.gz"
